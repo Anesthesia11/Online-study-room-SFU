@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>进入线上自习室</title>
+    <link rel="stylesheet" href="join.css" />
+  </head>
+  <body>
+    <main class="join-container">
+      <section class="join-card">
+        <div class="brand">
+          <h1>线上自习室</h1>
+          <p>输入房间信息，即可与伙伴远程自习、同步番茄钟和共享音视频。</p>
+        </div>
+        <button id="join-theme-toggle" type="button" class="theme-toggle">切换暗夜模式</button>
+        <form id="join-form">
+          <label>
+            房间 ID
+            <input id="join-room" type="text" value="" required />
+          </label>
+          <label>
+            用户名
+            <input id="join-name" type="text" value="" required />
+          </label>
+          <button type="submit">进入房间</button>
+        </form>
+        <small class="hint">
+          提示：如需公网访问，请先按 README 配置 Cloudflare Tunnel，并将 `wsBase` 指向你的域名。
+        </small>
+      </section>
+    </main>
+    <script>
+      const THEME_KEY = "studyRoomTheme";
+
+      function applyTheme(theme) {
+        const value = theme === "dark" ? "dark" : "light";
+        const root = document.documentElement;
+        if (value === "dark") {
+          root.setAttribute("data-theme", "dark");
+        } else {
+          root.removeAttribute("data-theme");
+        }
+        try {
+          localStorage.setItem(THEME_KEY, value);
+        } catch (_) {
+          /* ignore */
+        }
+        const toggle = document.getElementById("join-theme-toggle");
+        if (toggle) {
+          toggle.textContent =
+            value === "dark" ? "切换浅色模式" : "切换暗夜模式";
+        }
+      }
+
+      let savedTheme = "dark";
+      try {
+        savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+      } catch (_) {
+        savedTheme = "dark";
+      }
+      applyTheme(savedTheme);
+
+      const themeBtn = document.getElementById("join-theme-toggle");
+      if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+          let current = "dark";
+          try {
+            current = localStorage.getItem(THEME_KEY) || "dark";
+          } catch (_) {
+            current = "dark";
+          }
+          applyTheme(current === "dark" ? "light" : "dark");
+        });
+      }
+
+      const form = document.getElementById("join-form");
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const room = document.getElementById("join-room").value.trim();
+        const name = document.getElementById("join-name").value.trim();
+        if (!room || !name) {
+          return;
+        }
+        sessionStorage.setItem(
+          "studyRoomJoin",
+          JSON.stringify({ room, name })
+        );
+        const params = new URLSearchParams({ room, name });
+        let theme = "dark";
+        try {
+          theme = localStorage.getItem(THEME_KEY) || "dark";
+        } catch (_) {
+          theme = "dark";
+        }
+        params.set("theme", theme);
+        window.location.href = `index.html?${params.toString()}`;
+      });
+    </script>
+  </body>
+</html>

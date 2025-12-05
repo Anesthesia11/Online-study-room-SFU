@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>线上自习室</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="workspace-layout">
+      <section class="panel panel-info">
+        <div class="panel-info__grid">
+          <div class="panel-block panel-block--primary">
+          <h1 id="room-title">线上自习室</h1>
+          <div class="session-meta">
+            <div class="session-meta__item">
+              <p>昵称</p>
+              <strong id="session-user">-</strong>
+            </div>
+            <button id="leave-btn" type="button" disabled>离开房间</button>
+          </div>
+
+          <div class="goal-box">
+            <div class="goal-box__header">
+              <h2>今日目标</h2>
+              <div class="goal-box__actions">
+                <button id="goal-add-btn" class="goal-icon-btn" type="button" aria-label="添加目标">+</button>
+                <button id="goal-delete-btn" class="goal-icon-btn" type="button" aria-label="删除目标" hidden>
+                  <span class="icon-trash" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+            <div class="goal-list-container" data-expanded="false" data-empty="true" data-delete-mode="false">
+              <ul id="goal-list"></ul>
+              <p id="goal-empty-hint">点击 “+” 添加今日目标</p>
+            </div>
+            <button id="goal-expand-btn" class="goal-expand-btn" type="button" hidden>展开全部</button>
+          </div>
+
+            <div class="timer-box">
+              <div id="timer-display">00:00</div>
+              <p id="timer-status">未连接</p>
+              <div class="duration-row">
+                <label>
+                  专注时长（分钟）
+                  <input id="focus-length" type="number" min="1" max="180" value="25" />
+                </label>
+                <label>
+                  休息时长（分钟）
+                  <input id="break-length" type="number" min="1" max="120" value="5" />
+                </label>
+              </div>
+              <div class="actions">
+                <button data-action="start_focus" disabled>开始计时</button>
+                <button data-action="start_break" disabled>休息</button>
+                <button data-action="pause" disabled>暂停</button>
+                <button data-action="skip_break" disabled>跳过休息</button>
+                <button data-action="reset" disabled>重置</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-block panel-block--secondary">
+            <div class="state-card">
+              <h2>聊天室</h2>
+              <div class="chat-box">
+                <ul id="chat-log"></ul>
+                <form id="chat-form">
+                  <input id="chat-input" type="text" placeholder="输入消息..." />
+                  <button type="submit">发送</button>
+                </form>
+              </div>
+              <div class="leaderboard-box">
+                <h3>番茄钟时长排行</h3>
+                <ul id="leaderboard"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel panel-media">
+        <div class="panel-media__header">
+          <div>
+            <h2>当前在线  </h2>
+            <p class="media-hint">主画面在此显示，点击某人可放大，下面按钮可开关本地设备。</p>
+          </div>
+          <button id="theme-toggle" type="button" class="theme-toggle">切换暗夜模式</button>
+          <div class="media-controls">
+            <button id="mic-btn" type="button" data-active="false">麦克风已关闭</button>
+            <button id="cam-btn" type="button" data-active="false">摄像头已关闭</button>
+            <button id="screen-btn" type="button" data-active="false">未分享屏幕</button>
+          </div>
+        </div>
+        <div id="media-grid" class="media-grid" aria-live="polite"></div>
+      </section>
+    </main>
+    <script src="main.js" type="module"></script>
+  </body>
+</html>
